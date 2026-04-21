@@ -30,7 +30,7 @@ namespace DragRacingAPI.Controllers
 
             var newPlayer = new Player
             {
-                Username = request.Username, Password = request.Password, Cash = 5000, 
+                Username = request.Username, Password = request.Password, Cash = 200000, 
                 Garage = new System.Collections.Generic.List<Car> {
                     new Car { Name = "VW Golf GTI", MaxRpm = 6500, Horsepower = 220, ShiftTimeMs = 400 }
                 }
