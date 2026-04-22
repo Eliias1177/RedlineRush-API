@@ -8,8 +8,12 @@ namespace DragRacingAPI.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly AppDbContext _context; // NUEVO
-        public AuthController(AppDbContext context) { _context = context; }
+        private readonly AppDbContext _context; 
+
+        public AuthController(AppDbContext context) 
+        { 
+            _context = context; 
+        }
 
         [HttpPost("login")]
         public async Task<ActionResult<Player>> Login([FromBody] LoginRequest request)
@@ -30,17 +34,28 @@ namespace DragRacingAPI.Controllers
 
             var newPlayer = new Player
             {
-                Username = request.Username, Password = request.Password, Cash = 200000, 
+                Username = request.Username, 
+                Password = request.Password, 
+                Cash = 200000, 
                 Garage = new System.Collections.Generic.List<Car> {
                     new Car { Name = "VW Golf GTI", MaxRpm = 6500, Horsepower = 220, ShiftTimeMs = 400 }
                 }
             };
+
             _context.Players.Add(newPlayer);
             await _context.SaveChangesAsync(); // Guardar en SQLite
             return Ok(newPlayer); 
         }
 
+        // --- NUEVA RUTA PARA PANEL DE ADMINISTRADOR ---
         [HttpGet("all")]
-        public async Task<ActionResult> GetAllUsers() { return Ok(await _context.Players.Include(p => p.Garage).ToListAsync()); }
+        public async Task<ActionResult> GetAllUsers() 
+        { 
+            var users = await _context.Players
+                .Include(p => p.Garage)
+                .ToListAsync();
+                
+            return Ok(users); 
+        }
     }
 }
